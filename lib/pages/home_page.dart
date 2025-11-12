@@ -1,11 +1,11 @@
 // import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_osm_plugin/flutter_osm_plugin.dart';
-import 'package:lakbaysox/pages/save_destinationpage.dart';
-import '../controller/map_controller.dart';
-import '../widgets/search_bar.dart'; // ✅ import your custom search bar
-import '../widgets/map_footer.dart';
-import '../widgets/category_button.dart';
+import 'package:lakbaysox/pages/save_destination_page.dart';
+import 'package:lakbaysox/controller/map_controller.dart';
+import 'package:lakbaysox/widgets/search_bar.dart'; // ✅ import your custom search bar
+import 'package:lakbaysox/widgets/map_footer.dart';
+import 'package:lakbaysox/widgets/category_button.dart';
 
 class Homepage extends StatefulWidget {
   const Homepage({super.key});

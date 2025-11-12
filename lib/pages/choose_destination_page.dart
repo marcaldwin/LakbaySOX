@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import '../model/route_model.dart';
-import '../widgets/route_input_box.dart';
-import '../widgets/transport_buttons.dart';
-import '../widgets/route_list_item.dart';
+import 'package:lakbaysox/model/route.dart';
+import 'package:lakbaysox/widgets/route_input_box.dart';
+import 'package:lakbaysox/widgets/transport_buttons.dart';
+import 'package:lakbaysox/widgets/route_list_item.dart';
 
 class ChooseDestinationPage extends StatefulWidget {
   const ChooseDestinationPage({super.key});

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import '../widgets/search_bar.dart';
-import '../widgets/filter_bar.dart';
-import '../widgets/accommodation_card.dart';
-import '../model/accommodation_model.dart';
+import 'package:lakbaysox/widgets/search_bar.dart';
+import 'package:lakbaysox/widgets/filter_bar.dart';
+import 'package:lakbaysox/widgets/accommodation_card.dart';
+import 'package:lakbaysox/model/accommodation.dart';
 
 class Accommodationpage extends StatefulWidget {
   const Accommodationpage({super.key});
@@ -69,6 +69,7 @@ class _AccommodationpageState extends State<Accommodationpage> {
     super.dispose();
   }
 
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Column(
@@ -117,9 +118,7 @@ class _AccommodationpageState extends State<Accommodationpage> {
               itemBuilder: (context, index) {
                 final accommodation = accommodations[index];
                 return Padding(
-                  padding: const EdgeInsets.only(
-                    bottom: 16,
-                  ), 
+                  padding: const EdgeInsets.only(bottom: 16),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [

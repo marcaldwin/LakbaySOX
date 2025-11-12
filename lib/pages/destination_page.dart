@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:lakbaysox/widgets/custom_header.dart';
-import '../widgets/resort_card.dart';
-import '../model/resort_model.dart';
+import 'package:lakbaysox/widgets/resort_card.dart';
+import 'package:lakbaysox/model/resort.dart';
 
 class Destinationpage extends StatefulWidget {
   const Destinationpage({super.key});

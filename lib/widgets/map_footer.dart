@@ -22,8 +22,8 @@ class MapFooter extends StatelessWidget {
       left: 0,
       child: Container(
         height: 65,
-        padding: EdgeInsets.all(12),
-        decoration: BoxDecoration(
+        padding: const EdgeInsets.all(12),
+        decoration: const BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.only(
             topLeft: Radius.circular(30),
@@ -34,13 +34,13 @@ class MapFooter extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
-            IconButton(icon: Icon(Icons.map), onPressed: onMapTypePressed),
-            IconButton(icon: Icon(Icons.bookmark), onPressed: onSavePressed),
+            IconButton(icon: const Icon(Icons.map), onPressed: onMapTypePressed),
+            IconButton(icon: const Icon(Icons.bookmark), onPressed: onSavePressed),
             IconButton(
-              icon: Icon(Icons.location_on),
+              icon: const Icon(Icons.location_on),
               onPressed: onCurrentLocationPressed,
             ),
-            IconButton(icon: Icon(Icons.route), onPressed: onRoutePressed),
+            IconButton(icon: const Icon(Icons.route), onPressed: onRoutePressed),
           ],
         ),
       ),

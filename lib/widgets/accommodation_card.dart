@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../model/accommodation_model.dart';
+import 'package:lakbaysox/model/accommodation.dart';
 
 class AccommodationCard extends StatelessWidget {
   final Accommodation accommodation;

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../model/resort_model.dart';
+import 'package:lakbaysox/model/resort.dart';
 
 class ResortCard extends StatelessWidget {
   final Resort resort;

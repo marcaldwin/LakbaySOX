@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../model/route_model.dart';
+import 'package:lakbaysox/model/route.dart';
 
 class RouteListItem extends StatelessWidget {
   final RouteModel route;
