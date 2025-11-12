@@ -13,53 +13,71 @@ class Accommodationpage extends StatefulWidget {
 
 class _AccommodationpageState extends State<Accommodationpage> {
   final TextEditingController _searchController = TextEditingController();
+  String _selectedFilter = 'All';
 
-  // 🔥 DELETE THIS when backend is ready
-  // This is just temporary mock data for testing UI
+  // Mock data (keep until backend)
   final List<Accommodation> accommodations = [
     Accommodation(
+      id: 'acc_001',
       name: 'Sunrise Resort',
+      imageUrl: 'https://picsum.photos/seed/acc1/640/420',
+      pricePerNight: 1800,
       rating: 4.5,
+      amenities: const ['wifi', 'pool', 'parking'],
+      lat: 6.111,
+      lng: 125.171,
+      contact: '+63 912 345 6789',
       reviews: 128,
       location: 'General Santos City',
-      images: [
-        'https://picsum.photos/200/150?2',
-        'https://picsum.photos/200/150?3',
-        'https://picsum.photos/200/150?4',
+      images: const [
+        'https://picsum.photos/seed/acc1a/600/400',
+        'https://picsum.photos/seed/acc1b/600/400',
+        'https://picsum.photos/seed/acc1c/600/400',
       ],
     ),
     Accommodation(
+      id: 'acc_002',
       name: 'Lakeview Hotel',
+      imageUrl: 'https://picsum.photos/seed/acc2/640/420',
+      pricePerNight: 2400,
       rating: 4.2,
+      amenities: const ['wifi', 'breakfast', 'lake_view'],
+      lat: 6.250,
+      lng: 124.990,
+      contact: 'stay@lakeview.ph',
       reviews: 89,
       location: 'Koronadal City',
-      images: [
-        'https://picsum.photos/200/150?5',
-        'https://picsum.photos/200/150?6',
-        'https://picsum.photos/200/150?8',
+      images: const [
+        'https://picsum.photos/seed/acc2a/600/400',
+        'https://picsum.photos/seed/acc2b/600/400',
+        'https://picsum.photos/seed/acc2c/600/400',
       ],
     ),
     Accommodation(
-      name: 'example123',
+      id: 'acc_003',
+      name: 'City Suites',
+      imageUrl: 'https://picsum.photos/seed/acc3/640/420',
+      pricePerNight: 1500,
       rating: 4.2,
-      reviews: 89,
+      amenities: const ['wifi', 'aircon'],
+      lat: 6.120,
+      lng: 125.010,
+      contact: '+63 900 111 2222',
+      reviews: 102,
       location: 'Koronadal City',
-      images: [
-        'https://picsum.photos/200/150?9',
-        'https://picsum.photos/200/150?10',
-        'https://picsum.photos/200/150?11',
-      ],
     ),
     Accommodation(
-      name: 'tae Hotel',
-      rating: 4.2,
-      reviews: 89,
-      location: 'manila City',
-      images: [
-        'https://picsum.photos/200/150?12',
-        'https://picsum.photos/200/150?13',
-        'https://picsum.photos/200/150?14',
-      ],
+      id: 'acc_004',
+      name: 'Bayfront Homestay',
+      imageUrl: 'https://picsum.photos/seed/acc4/640/420',
+      pricePerNight: 900,
+      rating: 4.1,
+      amenities: const ['kitchen', 'near_beach'],
+      lat: 5.990,
+      lng: 125.300,
+      contact: 'host@bayfront.ph',
+      reviews: 56,
+      location: 'Glan, Sarangani',
     ),
   ];
 
@@ -69,8 +87,40 @@ class _AccommodationpageState extends State<Accommodationpage> {
     super.dispose();
   }
 
+  bool _matchesFilter(Accommodation a) {
+    // Simple, UI-only mapping until you add a real "type" field
+    switch (_selectedFilter) {
+      case 'Hotels':
+        return a.name.toLowerCase().contains('hotel') ||
+            a.amenities.any((x) => x.toLowerCase().contains('breakfast'));
+      case 'Resorts':
+        return a.name.toLowerCase().contains('resort') ||
+            a.amenities.any((x) => x.toLowerCase().contains('pool'));
+      case 'Homestays':
+        return a.name.toLowerCase().contains('homestay') ||
+            a.amenities.any((x) => x.toLowerCase().contains('kitchen'));
+      default:
+        return true; // 'All'
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    final query = _searchController.text.trim().toLowerCase();
+
+    // Search by name/location/amenities + selected filter
+    final visible =
+        accommodations.where((a) {
+          final inName = a.name.toLowerCase().contains(query);
+          final inLoc = (a.location ?? '').toLowerCase().contains(query);
+          final inAmen = a.amenities.any(
+            (am) => am.toLowerCase().contains(query),
+          );
+          final passesSearch =
+              query.isEmpty ? true : (inName || inLoc || inAmen);
+          return passesSearch && _matchesFilter(a);
+        }).toList();
+
     return Scaffold(
       body: Column(
         children: [
@@ -86,68 +136,101 @@ class _AccommodationpageState extends State<Accommodationpage> {
                       prefixIcon: Icons.arrow_back,
                       suffixIcon: Icons.close,
                       hintText: "Accommodation",
-                      onSubmitted: (query) {
-                        debugPrint('Search: $query');
+                      onSubmitted: (_) => setState(() {}),
+                      onChanged: (_) => setState(() {}),
+                      // 👇 Make the icons do something useful
+                      onPrefixTap: () => Navigator.maybePop(context),
+                      onSuffixTap: () {
+                        _searchController.clear();
+                        setState(() {});
                       },
                     ),
                   ),
                 ),
                 FilterBarWidget(
-                  filters: ['All', 'Hotels', 'Resorts', 'Homestays'],
+                  filters: const ['All', 'Hotels', 'Resorts', 'Homestays'],
                   onSelected: (filter) {
-                    debugPrint('Selected filter: $filter');
+                    setState(() => _selectedFilter = filter);
                   },
                 ),
                 const SizedBox(height: 16),
               ],
             ),
           ),
-
-          // Green divider
-          // Container(
-          //   width: MediaQuery.of(context).size.width,
-          //   height: 8,
-          //   color: const Color(0xFF97B876),
-          // ),
-
-          // Accommodation List
           Expanded(
-            child: ListView.builder(
-              padding: const EdgeInsets.symmetric(vertical: 16),
-              itemCount: accommodations.length,
-              itemBuilder: (context, index) {
-                final accommodation = accommodations[index];
-                return Padding(
-                  padding: const EdgeInsets.only(bottom: 16),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      // Green border
-                      Container(
-                        width: double.infinity,
-                        height: 8,
-                        color: const Color(0xFF97B876),
-                      ),
-
-                      Padding(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 16,
-                          vertical: 10,
-                        ),
-                        child: AccommodationCard(accommodation: accommodation),
-                      ),
-                    ],
-                  ),
-                );
-              },
-            ),
+            child:
+                visible.isEmpty
+                    ? _EmptyState(
+                      label:
+                          query.isEmpty
+                              ? 'No accommodations found'
+                              : 'No results for “$query”',
+                      onClear:
+                          (query.isNotEmpty || _selectedFilter != 'All')
+                              ? () {
+                                _searchController.clear();
+                                _selectedFilter = 'All';
+                                setState(() {});
+                              }
+                              : null,
+                    )
+                    : ListView.builder(
+                      padding: const EdgeInsets.symmetric(vertical: 16),
+                      itemCount: visible.length,
+                      itemBuilder: (context, index) {
+                        final a = visible[index];
+                        return Padding(
+                          key: ValueKey(a.id),
+                          padding: const EdgeInsets.only(bottom: 16),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              // Green border
+                              Container(
+                                width: double.infinity,
+                                height: 8,
+                                color: const Color(0xFF97B876),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 16,
+                                  vertical: 10,
+                                ),
+                                child: AccommodationCard(accommodation: a),
+                              ),
+                            ],
+                          ),
+                        );
+                      },
+                    ),
           ),
+        ],
+      ),
+    );
+  }
+}
 
-          // 🧩 BACKEND NOTE:
-          // When backend is ready, remove the mock `accommodations` list
-          // and replace the ListView.builder’s data source with:
-          //  - FutureBuilder() if you’re fetching from REST API
-          //  - StreamBuilder() if you’re using Firebase/Firestore
+class _EmptyState extends StatelessWidget {
+  final String label;
+  final VoidCallback? onClear;
+  const _EmptyState({required this.label, this.onClear});
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          const Icon(Icons.search_off, size: 48, color: Colors.black26),
+          const SizedBox(height: 8),
+          Text(label, style: const TextStyle(fontSize: 16)),
+          if (onClear != null) ...[
+            const SizedBox(height: 8),
+            TextButton(
+              onPressed: onClear,
+              child: const Text('Clear search & filters'),
+            ),
+          ],
         ],
       ),
     );

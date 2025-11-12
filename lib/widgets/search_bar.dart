@@ -2,55 +2,55 @@ import 'package:flutter/material.dart';
 
 class SearchBarWidget extends StatelessWidget {
   final TextEditingController controller;
-  final void Function(String)? onSubmitted;
-  final IconData? prefixIcon; // ✅ Custom prefix icon
-  final IconData? suffixIcon; // ✅ Custom suffix icon
-  final String hintText; // ✅ Custom hint text
+  final IconData? prefixIcon;
+  final IconData? suffixIcon;
+  final String? hintText;
+
+  // ✅ Add these optional callbacks
+  final ValueChanged<String>? onChanged;
+  final ValueChanged<String>? onSubmitted;
+  final VoidCallback? onPrefixTap;
+  final VoidCallback? onSuffixTap;
 
   const SearchBarWidget({
     super.key,
     required this.controller,
-    this.onSubmitted,
     this.prefixIcon,
     this.suffixIcon,
-    this.hintText = "Search...", // default
+    this.hintText,
+    this.onChanged,
+    this.onSubmitted,
+    this.onPrefixTap,
+    this.onSuffixTap,
   });
 
   @override
   Widget build(BuildContext context) {
-    const borderColor = Color(0xFF97B876); // ✅ Soft green border
-
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 12),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: borderColor, width: 2),
-      ),
-      child: TextField(
-        controller: controller,
-        cursorColor: borderColor,
-        decoration: InputDecoration(
-          hintText: hintText,
-          border: InputBorder.none,
-          contentPadding: const EdgeInsets.symmetric(
-            vertical: 15,
-            horizontal: 20,
-          ),
-          prefixIcon:
-              prefixIcon != null
-                  ? Icon(prefixIcon, color: Colors.black)
-                  : null, // ✅ Only show if provided
-          suffixIcon:
-              suffixIcon != null
-                  ? Icon(suffixIcon, color: Colors.black)
-                  : null, // ✅ Only show if provided
+    return TextField(
+      controller: controller,
+      onChanged: onChanged, // ✅ now supported
+      onSubmitted: onSubmitted, // ✅ still supported
+      decoration: InputDecoration(
+        prefixIcon:
+            prefixIcon == null
+                ? null
+                : IconButton(
+                  icon: Icon(prefixIcon),
+                  onPressed: onPrefixTap, // ✅ now supported
+                ),
+        suffixIcon:
+            suffixIcon == null
+                ? null
+                : IconButton(
+                  icon: Icon(suffixIcon),
+                  onPressed: onSuffixTap, // ✅ now supported
+                ),
+        hintText: hintText,
+        border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+        contentPadding: const EdgeInsets.symmetric(
+          horizontal: 12,
+          vertical: 10,
         ),
-        onSubmitted: (value) {
-          if (onSubmitted != null) {
-            onSubmitted!(value);
-          }
-        },
       ),
     );
   }

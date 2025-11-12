@@ -16,24 +16,24 @@ class _DestinationpageState extends State<Destinationpage> {
 
   // ✅ Use the new Resort constructor (id, tags, municipality, lat/lng, etc.)
   final List<Resort> resorts = [
-    Resort(
+    const Resort(
       id: 'res_laguna_paradise',
       name: "Laguna Paradise",
       caption: "A calm escape surrounded by nature.",
       rating: 4.8,
       imageUrl: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e",
-      tags: const ['falls', 'nature'],
+      tags: ['falls', 'nature'],
       lat: 6.246,
       lng: 124.990,
       municipality: "South Cotabato",
     ),
-    Resort(
+    const Resort(
       id: 'res_sunset_bay',
       name: "Sunset Bay",
       caption: "Perfect for weekend getaways.",
       rating: 4.5,
       imageUrl: "https://images.unsplash.com/photo-1493558103817-58b2924bce98",
-      tags: const ['beach', 'sunset'],
+      tags: ['beach', 'sunset'],
       lat: 5.827,
       lng: 125.210,
       municipality: "Sarangani",
