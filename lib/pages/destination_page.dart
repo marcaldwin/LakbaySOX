@@ -13,31 +13,44 @@ class Destinationpage extends StatefulWidget {
 class _DestinationpageState extends State<Destinationpage> {
   bool _isSearchMode = false;
   String _searchQuery = '';
+
+  // ✅ Use the new Resort constructor (id, tags, municipality, lat/lng, etc.)
   final List<Resort> resorts = [
     Resort(
+      id: 'res_laguna_paradise',
       name: "Laguna Paradise",
       caption: "A calm escape surrounded by nature.",
       rating: 4.8,
-      location: "South Cotabato",
-      imageUrl:
-          "https://images.unsplash.com/photo-1507525428034-b723cf961d3e", // demo only
+      imageUrl: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e",
+      tags: const ['falls', 'nature'],
+      lat: 6.246,
+      lng: 124.990,
+      municipality: "South Cotabato",
     ),
     Resort(
+      id: 'res_sunset_bay',
       name: "Sunset Bay",
       caption: "Perfect for weekend getaways.",
       rating: 4.5,
-      location: "Sarangani",
       imageUrl: "https://images.unsplash.com/photo-1493558103817-58b2924bce98",
+      tags: const ['beach', 'sunset'],
+      lat: 5.827,
+      lng: 125.210,
+      municipality: "Sarangani",
+      isFavorite: true,
     ),
   ];
 
   @override
   Widget build(BuildContext context) {
+    final q = _searchQuery.trim().toLowerCase();
+
+    // 🔎 Search by name, municipality, or tags
     final filteredResorts =
         resorts.where((resort) {
-          final query = _searchQuery.toLowerCase();
-          return resort.name.toLowerCase().contains(query) ||
-              resort.location.toLowerCase().contains(query);
+          return resort.name.toLowerCase().contains(q) ||
+              resort.municipality.toLowerCase().contains(q) ||
+              resort.tags.any((t) => t.toLowerCase().contains(q));
         }).toList();
 
     return Scaffold(
@@ -53,12 +66,8 @@ class _DestinationpageState extends State<Destinationpage> {
                 _searchQuery = '';
               });
             },
-            onSearchChanged: (value) {
-              setState(() => _searchQuery = value);
-            },
+            onSearchChanged: (value) => setState(() => _searchQuery = value),
           ),
-
-          // 👇 One Expanded only
           Expanded(
             child:
                 filteredResorts.isEmpty
@@ -77,16 +86,17 @@ class _DestinationpageState extends State<Destinationpage> {
                         return ResortCard(
                           resort: resort,
                           onFavoriteTap: () {
-                            setState(() {
-                              resorts[index] = Resort(
-                                name: resort.name,
-                                caption: resort.caption,
-                                rating: resort.rating,
-                                location: resort.location,
-                                imageUrl: resort.imageUrl,
-                                isFavorite: !resort.isFavorite,
-                              );
-                            });
+                            // ✅ Toggle by id so filtering doesn’t break indices
+                            final i = resorts.indexWhere(
+                              (r) => r.id == resort.id,
+                            );
+                            if (i != -1) {
+                              setState(() {
+                                resorts[i] = resorts[i].copyWith(
+                                  isFavorite: !resort.isFavorite,
+                                );
+                              });
+                            }
                           },
                         );
                       },
